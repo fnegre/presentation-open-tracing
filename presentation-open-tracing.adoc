@@ -1,32 +1,69 @@
 = Présentation Open Tracing
 
-Mise Mise en scène 1 : giphy n'affiche plus les gifs
-Architecture schéma schéma
-Scénario Scénario 1: aucun outil
-Scénario 2 : elk sans id corrélation corrélation
+Mise en scène 1 : giphy n'affiche plus les gifs : oh my god
+
+Schéma de l'architecture du projet
+
+Comment trouver la source de l'anomalie ?
+
+Scénario 1: aucun outil
+Grep dans les logs, télécharement de centaines de mo de logs
+
+Scénario 2 : elk sans id corrélation
+C'est la galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs
+
 Scénario 3 : id de corrélation
-Schéma étapes id corrélation corrélation
-Solution technique manuelle
-Solution Sleut Sleut spring boot
-Ou brave braves brave
+Top moumouet
+
+Schéma étapes id corrélation corrélation + propagation
+
+Vocabulaire
+
+Solution technique manuelle : Filtre servlet,
+
+Solution Brave
+
+Solution Sleuth Spring Boot
+
 Résultats logs access, appli applications appli, élastique elk elk
 Content Content
 
+Mise en scène 2 :
+2ème problématique : giphy est lent, d'où vient la lenteur ?
 
-2ème problématique problématiques problématique : giphy gif giphy est lent
-Vidéo Vidéos Vidéo atteinte 5 secondes
-Sleut Sleut et brave brave se connectent à zipkin zipkin
-Vidéo Vie.ecoles Vidéo zipkin zipkin
-Explications Explications des +4 événements
-1 an plus tard, vous vous voulez voulez changer changer d'outils d'outils d'outils zipkin ne répond plus plus à vos attentes, ou n'est n'est plus mis mis à jour aie aies aie
+Vidéo attente 5 secondes
 
-Solution Solution open tracing façade façade
-Principe
-Alternative sleuth
-Alternative zipkin zippée zipkin
-Qui l'utilise
-Jaeger
-Outils jeunes jeunes, vaut vaut mieux pas pas parier sur sur un outil et trop se se lier à lui
+Présentation Zipkin
+Sleuth et brave communiquent avec Zipkin
+
+Vidéo zipkin
+
+Explications des +4 événements
+
+ * Client Sent
+ * Server received
+ * Server sent
+ * Client Received
+
+
+Mise en scène 3 : peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
+Le projet est mort, pas maintenu
+Vous allez devoir jeter tout ce qui a été développé, et le développez avec un nouvel outil ??
+Aie aie aie
+
+Solution : Open tracing
+
+Principe :
+
+* Façade
+* Compatible Zipkin, mais aussi Jaeger...
+* Implémentation Brave compatible Open Tracing
+* Bibliothèque pour Spring Boot aussi simple que Sleuth
+* Qui l'utilise
+
+Conclusion :
+Les Outils sont relativement jeunes, risqué de parier sur outil et trop se se lier à lui
+Open Tracing semble être une bonne solutiong
 
 
 
