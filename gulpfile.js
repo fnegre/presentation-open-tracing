@@ -4,7 +4,9 @@ const browserSync = require('browser-sync').create();
 gulp.task('reveal', () => {
     var asciidoctor = require('asciidoctor.js')();
     require('asciidoctor-reveal.js');
-    var attributes = {'revealjsdir': 'node_modules/reveal.js@'};
+    var attributes = {
+        'revealjsdir': 'node_modules/reveal.js@',
+        'revealjs_history': true};
     var options = {safe: 'safe', backend: 'revealjs', attributes: attributes};
     asciidoctor.convertFile('presentation.adoc', options);
 });
@@ -22,9 +24,7 @@ gulp.task('serve', ['reveal'], () => {
     });
 
     gulp.watch(
-        [
-            '*.adoc'
-        ], ['reveal', browserSync.reload]);
+        ['*.adoc', '*.js'], ['reveal', browserSync.reload]);
 });
 
 gulp.task('default', ['serve']);

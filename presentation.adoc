@@ -1,4 +1,4 @@
-= Présentation Open Tracing Test
+= Présentation Open Tracing
 
 Nantes JUG : 10/04/2018
 
@@ -8,7 +8,7 @@ Twitter : @floriannegre
 
 Github : fnegre
 
-== Imaginons
+== Imaginons...
 
 //TODO : mettre image
 
@@ -18,7 +18,7 @@ Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
 --
 
 
-== Schéma de l'architecture du projet
+== Schema de l'architecture du projet
 
 // TODO METTRE SCHEMA
 [ditaa]

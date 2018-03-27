@@ -12,3 +12,7 @@ npm install grunt-contrib-connect --save-dev
 npm install -g gulp
 npm i browser-sync
 
+
+https://asciidoctor.org/docs/asciidoctor-revealjs/
+
+Pas de diagramme avec asciidoctor.js : https://github.com/asciidoctor/asciidoctor.js/issues/410
