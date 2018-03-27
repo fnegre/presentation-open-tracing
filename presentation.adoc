@@ -1,10 +1,24 @@
-= Présentation Open Tracing
+= Présentation Open Tracing Test
 
-Mise en scène 1 : giphy n'affiche plus les gifs : oh my god
+== Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
 
-Schéma de l'architecture du projet
+Test
+[NOTE.speaker]
+--
+Commentaires speaker
+--
+
+
+== Schéma de l'architecture du projet
+test 2
+
+[NOTE.speaker]
+--
+Actually things aren't that bad
+--
 
 Comment trouver la source de l'anomalie ?
+
 
 Scénario 1: aucun outil
 Grep dans les logs, télécharement de centaines de mo de logs
