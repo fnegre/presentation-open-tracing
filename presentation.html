@@ -2,42 +2,65 @@
 link.rel = 'stylesheet';
 link.type = 'text/css';
 link.href = window.location.search.match( /print-pdf/gi ) ? "node_modules/reveal.js/css/print/pdf.css" : "node_modules/reveal.js/css/print/paper.css";
-document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--[if lt IE 9]><script src="node_modules/reveal.js/lib/js/html5shiv.js"></script><![endif]--></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>Présentation Open Tracing Test</h1></section><section id="mise_en_scne_1_giphy_n_affiche_plus_les_gifs_oh_my_god"><h2>Mise en scène 1 : giphy n&#8217;affiche plus les gifs : oh my god!!</h2><div class="paragraph"><p>Test</p></div>
-<aside class="notes"><div class="paragraph"><p>Commentaires speaker</p></div></aside></section>
-<section id="schma_de_l_architecture_du_projet"><h2>Schéma de l&#8217;architecture du projet</h2><div class="paragraph"><p>test 2</p></div>
-<aside class="notes"><div class="paragraph"><p>Actually things aren&#8217;t that bad</p></div></aside>
-<div class="paragraph"><p>Comment trouver la source de l&#8217;anomalie ?</p></div>
-<div class="paragraph"><p>Scénario 1: aucun outil
-Grep dans les logs, télécharement de centaines de mo de logs</p></div>
-<div class="paragraph"><p>Scénario 2 : elk sans id corrélation
-C&#8217;est la galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs</p></div>
-<div class="paragraph"><p>Scénario 3 : id de corrélation
-Top moumouet</p></div>
-<div class="paragraph"><p>Schéma étapes id corrélation corrélation + propagation</p></div>
-<div class="paragraph"><p>Vocabulaire</p></div>
-<div class="paragraph"><p>Solution technique manuelle : Filtre servlet,</p></div>
-<div class="paragraph"><p>Solution Brave</p></div>
-<div class="paragraph"><p>Solution Sleuth Spring Boot</p></div>
-<div class="paragraph"><p>Résultats logs access, appli applications appli, élastique elk elk
-Content Content</p></div>
-<div class="paragraph"><p>Mise en scène 2 :
-2ème problématique : giphy est lent, d&#8217;où vient la lenteur ?</p></div>
-<div class="paragraph"><p>Vidéo attente 5 secondes</p></div>
-<div class="paragraph"><p>Présentation Zipkin
-Sleuth et brave communiquent avec Zipkin</p></div>
-<div class="paragraph"><p>Vidéo zipkin</p></div>
-<div class="paragraph"><p>Explications des +4 événements</p></div>
-<div class="ulist"><ul><li><p>Client Sent</p></li><li><p>Server received</p></li><li><p>Server sent</p></li><li><p>Client Received</p></li></ul></div>
-<div class="paragraph"><p>Mise en scène 3 : peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
+document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--[if lt IE 9]><script src="node_modules/reveal.js/lib/js/html5shiv.js"></script><![endif]--></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>Présentation Open Tracing Test</h1><div class="preamble"><div class="paragraph"><p>Nantes JUG : 10/04/2018</p></div>
+<div class="paragraph"><p>Florian Nègre</p></div>
+<div class="paragraph"><p>Twitter : @floriannegre</p></div>
+<div class="paragraph"><p>Github : fnegre</p></div></div></section>
+<section id="imaginons"><h2>Imaginons</h2><aside class="notes"><div class="paragraph"><p>Mise en scène 1 : giphy n&#8217;affiche plus les gifs : oh my god!!</p></div></aside></section>
+<section id="schma_de_l_architecture_du_projet"><h2>Schéma de l&#8217;architecture du projet</h2><div class="literalblock"><div class="content"><pre>                   +-------------+
+                   | Asciidoctor |-------+
+                   |   diagram   |       |
+                   +-------------+       | PNG out
+                       ^                 |
+                       | ditaa in        |
+                       |                 v
+ +--------+   +--------+----+    /---------------\
+ |        | --+ Asciidoctor +--&gt; |               |
+ |  Text  |   +-------------+    |   Beautiful   |
+ |Document|   |   !magic!   |    |    Output     |
+ |     {d}|   |             |    |               |
+ +---+----+   +-------------+    \---------------/
+     :                                   ^
+     |          Lots of work             |
+     +-----------------------------------+</pre></div></div>
+<aside class="notes"><div class="paragraph"><p>Actually things aren&#8217;t that bad</p></div></aside></section>
+<section><section id="comment_trouver_la_source_de_l_anomalie"><h2>Comment trouver la source de l&#8217;anomalie ?</h2></section><section id="scnario_1_aucun_outil"><h2>Scénario 1: aucun outil</h2><div class="paragraph"><p>Grep dans les logs, télécharement de centaines de mo de logs</p></div></section><section id="scnario_2_elk_sans_id_corrlation"><h2>Scénario 2 : elk sans id corrélation</h2><div class="paragraph"><p>C&#8217;est la galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs</p></div></section><section id="scnario_3_id_de_corrlation"><h2>Scénario 3 : id de corrélation</h2><div class="paragraph"><p>Top moumouet</p></div></section></section>
+<section id="schma_tapes_id_corrlation_corrlation_propagation"><h2>Schéma étapes id corrélation corrélation + propagation</h2></section>
+<section id="vocabulaire"><h2>Vocabulaire</h2><div class="paragraph"><p>Sous forme d’arborescence :</p></div>
+<div class="ulist"><ul><li><p>Trace-id : identifiant commun</p></li><li><p>Span-id : identifiant propre à une opération</p></li><li><p>Parent-span-id : identifiant du span parent</p></li></ul></div>
+<aside class="notes"><div class="paragraph"><p>Document de travail : Google Dapper (2010) <a href="https://research.google.com/pubs/pub36356.html" class="bare">https://research.google.com/pubs/pub36356.html</a></p></div></aside></section>
+<section><section id="implmentations"><h2>Implémentations</h2></section><section id="solution_technique_manuelle_filtre_servlet"><h2>Solution technique manuelle : Filtre servlet,</h2></section><section id="solution_brave"><h2>Solution Brave</h2></section><section id="solution_spring_cloud_sleuth"><h2>Solution Spring Cloud Sleuth</h2><div class="paragraph"><p>Résultats logs access, appli applications appli, élastique elk elk
+Content</p></div>
+<aside class="notes"><div class="paragraph"><p><a href="https://github.com/spring-cloud/spring-cloud-sleuth" class="bare">https://github.com/spring-cloud/spring-cloud-sleuth</a>
+Starter pour Spring Boot
+Gestion transparente de l’envoi/réception des headers de traçage via RestTemplate et RestController
+Intégration automatique des ids de corrélation dans le MDC des librairies de logs</p></div></aside></section></section>
+<section id="mise_en_scne_2"><h2>Mise en scène 2 :</h2><div class="paragraph"><p>2ème problématique : giphy est lent, d&#8217;où vient la lenteur ?</p></div>
+<div class="paragraph"><p>Vidéo attente 5 secondes</p></div></section>
+<section id="prsentation_zipkin"><h2>Présentation Zipkin</h2><div class="paragraph"><p>Sleuth et brave communiquent avec Zipkin</p></div>
+<div class="paragraph"><p>Visualisation temporel des traces</p></div>
+<aside class="notes"></aside></section>
+<section id="vido_zipkin"><h2>Vidéo zipkin</h2></section>
+<section id="explications_des_4_vnements"><h2>Explications des +4 événements</h2><div class="paragraph"><p>4 étapes dans un Span</p></div>
+<div class="ulist"><ul><li><p>Client Sent</p></li><li><p>Server received</p></li><li><p>Server sent</p></li><li><p>Client Received</p></li></ul></div></section>
+<section id="mise_en_scne_3_obsolscence_des_outils"><h2>Mise en scène 3 : Obsoléscence des outils</h2><div class="paragraph"><p>peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
 Le projet est mort, pas maintenu
 Vous allez devoir jeter tout ce qui a été développé, et le développez avec un nouvel outil ??
-Aie aie aie</p></div>
-<div class="paragraph"><p>Solution : Open tracing</p></div>
-<div class="paragraph"><p>Principe :</p></div>
-<div class="ulist"><ul><li><p>Façade</p></li><li><p>Compatible Zipkin, mais aussi Jaeger&#8230;&#8203;</p></li><li><p>Implémentation Brave compatible Open Tracing</p></li><li><p>Bibliothèque pour Spring Boot aussi simple que Sleuth</p></li><li><p>Qui l&#8217;utilise</p></li></ul></div>
-<div class="paragraph"><p>Conclusion :
-Les Outils sont relativement jeunes, risqué de parier sur outil et trop se se lier à lui
-Open Tracing semble être une bonne solutiong</p></div></section></div></div><script src="node_modules/reveal.js/lib/js/head.min.js"></script><script src="node_modules/reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Aie aie aie</p></div></section>
+<section><section id="solution_open_tracing"><h2>Solution : Open tracing</h2><div class="paragraph"><p>Principe :</p></div><div class="ulist"><ul><li><p>Façade</p></li><li><p>Compatible Zipkin, mais aussi Jaeger&#8230;&#8203;</p></li><li><p>Implémentation Brave compatible Open Tracing</p></li><li><p>Bibliothèque pour Spring Boot aussi simple que Sleuth
+*
+*</p></li></ul></div><aside class="notes"><div class="paragraph"><p>Autres outils : Jaeger, Lightstep
+Plusieurs langages de programmation : Java, Go, PHP, Node.js, .NET
+Façade tel SLF4J pour le logging
+<a href="http://opentracing.io/documentation/pages/api/api-implementations.html" class="bare">http://opentracing.io/documentation/pages/api/api-implementations.html</a>
+<a href="https://medium.com/opentracing" class="bare">https://medium.com/opentracing</a></p></div></aside></section><section id="contributions"><h2>Contributions</h2><aside class="notes"><div class="paragraph"><p><a href="https://github.com/opentracing-contrib" class="bare">https://github.com/opentracing-contrib</a>
+<a href="https://github.com/openzipkin-contrib/brave-opentracing" class="bare">https://github.com/openzipkin-contrib/brave-opentracing</a></p></div></aside></section><section id="qui_utilise_open_tracing"><h2>Qui utilise Open Tracing</h2><div class="paragraph"><p>Uber, Apple, Yelp, Pinterest, Yelp &#8230;&#8203;</p></div></section><section id="cloud_native_computing_fundation"><h2>Cloud Native Computing Fundation</h2><div class="paragraph"><p>Promotion des solutions open source permettant de construire des applications distribuées et résilientes
+Chapoté par Linux Foundation
+Autres projets : Kubernetes, Grpc, &#8230;&#8203;</p></div>
+<aside class="notes"><div class="paragraph"><p><a href="https://www.cncf.io/" class="bare">https://www.cncf.io/</a> : Cloud Native Computing Fundation, autres projets : Kubernetes, Prometheus, GRPC</p></div></aside></section></section>
+<section id="conclusion"><h2>Conclusion :</h2><div class="paragraph"><p>Les Outils sont relativement jeunes, risqué de parier sur outil et trop se se lier à lui
+Open Tracing semble être une bonne solutiong
+Ne pas réinventer la roue</p></div></section></div></div><script src="node_modules/reveal.js/lib/js/head.min.js"></script><script src="node_modules/reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
 Reveal.initialize({
   // Display controls in the bottom right corner
   controls: true,

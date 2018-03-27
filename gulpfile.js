@@ -16,9 +16,9 @@ gulp.task('serve', ['reveal'], () => {
     browserSync.init({
     port: 8000,
     server: {
-        baseDir: '.',
     },
     browser: ['chrome'],
+    index: 'presentation.html'
     });
 
     gulp.watch(

@@ -1,58 +1,119 @@
 = Présentation Open Tracing Test
 
-== Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
+Nantes JUG : 10/04/2018
 
-Test
+Florian Nègre
+
+Twitter : @floriannegre
+
+Github : fnegre
+
+== Imaginons
+
+//TODO : mettre image
+
 [NOTE.speaker]
 --
-Commentaires speaker
+Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
 --
 
 
 == Schéma de l'architecture du projet
-test 2
+
+// TODO METTRE SCHEMA
+[ditaa]
+....
+                   +-------------+
+                   | Asciidoctor |-------+
+                   |   diagram   |       |
+                   +-------------+       | PNG out
+                       ^                 |
+                       | ditaa in        |
+                       |                 v
+ +--------+   +--------+----+    /---------------\
+ |        | --+ Asciidoctor +--> |               |
+ |  Text  |   +-------------+    |   Beautiful   |
+ |Document|   |   !magic!   |    |    Output     |
+ |     {d}|   |             |    |               |
+ +---+----+   +-------------+    \---------------/
+     :                                   ^
+     |          Lots of work             |
+     +-----------------------------------+
+....
 
 [NOTE.speaker]
 --
 Actually things aren't that bad
 --
 
-Comment trouver la source de l'anomalie ?
+== Comment trouver la source de l'anomalie ?
 
 
-Scénario 1: aucun outil
+=== Scénario 1: aucun outil
 Grep dans les logs, télécharement de centaines de mo de logs
 
-Scénario 2 : elk sans id corrélation
+=== Scénario 2 : elk sans id corrélation
 C'est la galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs
 
-Scénario 3 : id de corrélation
+=== Scénario 3 : id de corrélation
 Top moumouet
 
-Schéma étapes id corrélation corrélation + propagation
+== Schéma étapes id corrélation corrélation + propagation
+//TODO Image schema-propagation-id-correlation.png
 
-Vocabulaire
+== Vocabulaire
 
-Solution technique manuelle : Filtre servlet,
+Sous forme d’arborescence :
 
-Solution Brave
+* Trace-id : identifiant commun
+* Span-id : identifiant propre à une opération
+* Parent-span-id : identifiant du span parent
 
-Solution Sleuth Spring Boot
+[NOTE.speaker]
+--
+Document de travail : Google Dapper (2010) https://research.google.com/pubs/pub36356.html
+--
+
+== Implémentations
+
+=== Solution technique manuelle : Filtre servlet,
+
+=== Solution Brave
+
+=== Solution Spring Cloud Sleuth
 
 Résultats logs access, appli applications appli, élastique elk elk
-Content Content
+Content
 
-Mise en scène 2 :
+[NOTE.speaker]
+--
+https://github.com/spring-cloud/spring-cloud-sleuth
+Starter pour Spring Boot
+Gestion transparente de l’envoi/réception des headers de traçage via RestTemplate et RestController
+Intégration automatique des ids de corrélation dans le MDC des librairies de logs
+
+--
+
+== Mise en scène 2 :
 2ème problématique : giphy est lent, d'où vient la lenteur ?
 
 Vidéo attente 5 secondes
 
-Présentation Zipkin
+== Présentation Zipkin
 Sleuth et brave communiquent avec Zipkin
 
-Vidéo zipkin
+Visualisation temporel des traces
 
-Explications des +4 événements
+[NOTE.speaker]
+--
+
+--
+
+== Vidéo zipkin
+
+== Explications des +4 événements
+
+4 étapes dans un Span
 
  * Client Sent
  * Server received
@@ -60,12 +121,14 @@ Explications des +4 événements
  * Client Received
 
 
-Mise en scène 3 : peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
+== Mise en scène 3 : Obsoléscence des outils
+
+peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
 Le projet est mort, pas maintenu
 Vous allez devoir jeter tout ce qui a été développé, et le développez avec un nouvel outil ??
 Aie aie aie
 
-Solution : Open tracing
+== Solution : Open tracing
 
 Principe :
 
@@ -73,11 +136,49 @@ Principe :
 * Compatible Zipkin, mais aussi Jaeger...
 * Implémentation Brave compatible Open Tracing
 * Bibliothèque pour Spring Boot aussi simple que Sleuth
-* Qui l'utilise
+*
+*
 
-Conclusion :
+
+[NOTE.speaker]
+--
+Autres outils : Jaeger, Lightstep
+Plusieurs langages de programmation : Java, Go, PHP, Node.js, .NET
+Façade tel SLF4J pour le logging
+http://opentracing.io/documentation/pages/api/api-implementations.html
+https://medium.com/opentracing
+
+--
+
+=== Contributions
+
+
+[NOTE.speaker]
+--
+https://github.com/opentracing-contrib
+https://github.com/openzipkin-contrib/brave-opentracing
+
+--
+
+=== Qui utilise Open Tracing
+
+Uber, Apple, Yelp, Pinterest, Yelp ...
+
+=== Cloud Native Computing Fundation
+
+Promotion des solutions open source permettant de construire des applications distribuées et résilientes
+Chapoté par Linux Foundation
+Autres projets : Kubernetes, Grpc, ...
+[NOTE.speaker]
+--
+
+https://www.cncf.io/ : Cloud Native Computing Fundation, autres projets : Kubernetes, Prometheus, GRPC
+
+--
+== Conclusion :
 Les Outils sont relativement jeunes, risqué de parier sur outil et trop se se lier à lui
 Open Tracing semble être une bonne solutiong
+Ne pas réinventer la roue
 
 
 
