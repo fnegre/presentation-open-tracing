@@ -5,8 +5,10 @@ gulp.task('reveal', () => {
     var asciidoctor = require('asciidoctor.js')();
     require('asciidoctor-reveal.js');
     var attributes = {
-        'revealjsdir': 'node_modules/reveal.js@',
-        'revealjs_history': true};
+        'revealjsdir': 'node_modules/reveal.js@'
+        //,'revealjs_history': true
+        //,'revealjs_slideNumber': true
+        };
     var options = {safe: 'safe', backend: 'revealjs', attributes: attributes};
     asciidoctor.convertFile('presentation.adoc', options);
 });

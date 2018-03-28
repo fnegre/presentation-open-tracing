@@ -1,89 +1,121 @@
+:author: Florian Nègre
+:twitter: @floriannegre
+:imagesDir: assets/images
+// Configuration Reveal.js
+:revealjs_history: true
+
 = Présentation Open Tracing
 
-Nantes JUG : 10/04/2018
+{author}
 
-Florian Nègre
-
-Twitter : @floriannegre
+Twitter : {twitter}
 
 Github : fnegre
 
+Nantes JUG : 10/04/2018
+
 == Imaginons...
 
-//TODO : mettre image
+//TODO : mettre image ou video
 
 [NOTE.speaker]
 --
 Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
+Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affiche des photos de Trump à la place
+Utilisation de Fiddler pour créer un proxy
+https://media0.giphy.com/media/JIX9t2j0ZTN9S/200w_s.gif
+https://media0.giphy.com/media/**/*.gif --> pointe vers une photo de Trump
 --
 
 
-== Schema de l'architecture du projet
+== Architecture
 
-// TODO METTRE SCHEMA
 [ditaa]
 ....
-                   +-------------+
-                   | Asciidoctor |-------+
-                   |   diagram   |       |
-                   +-------------+       | PNG out
-                       ^                 |
-                       | ditaa in        |
-                       |                 v
- +--------+   +--------+----+    /---------------\
- |        | --+ Asciidoctor +--> |               |
- |  Text  |   +-------------+    |   Beautiful   |
- |Document|   |   !magic!   |    |    Output     |
- |     {d}|   |             |    |               |
- +---+----+   +-------------+    \---------------/
-     :                                   ^
-     |          Lots of work             |
-     +-----------------------------------+
+                         +-------------+
+                         |     IHM     |
+                         +-------------+
+                                |
+                                | Requête
+                                v
+                         +------+------+
+                         |     Back    |
+                         +-------------+
+                                |
+                                | Requête
+                                v
+                         +------+------+
+                         |   Service   |
+                         |     GIF     |
+                         +-------------+
+
 ....
 
 [NOTE.speaker]
 --
-Actually things aren't that bad
+Schéma Ditaa
 --
 
 == Comment trouver la source de l'anomalie ?
 
 
-=== Scénario 1: aucun outil
-Grep dans les logs, télécharement de centaines de mo de logs
+== Scénario 1 : Aucun outil
 
-=== Scénario 2 : elk sans id corrélation
-C'est la galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs
 
-=== Scénario 3 : id de corrélation
-Top moumouet
+[NOTE.speaker]
+--
+Grep, téléchargement de centaines de mo de logs, pb pour ouvrir le fichier...
+--
 
-== Schéma étapes id corrélation corrélation + propagation
-//TODO Image schema-propagation-id-correlation.png
+== Scénario 2 : Aggrégation logs
 
-== Vocabulaire
+[NOTE.speaker]
+--
+elk sans id corrélation
+C'est mieux, mais reste galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs
+--
 
-Sous forme d’arborescence :
+== Scénario 3 : Identifiants de corrélation
+
+[NOTE.speaker]
+--
+Top moumoute
+--
+
+== Principe
+image::/{imagesDir}/schema-propagation-id-correlation.png[Schéma propagation id corrélation]
+
+[NOTE.speaker]
+--
+Expliquer le principe d'un identifiant de corrélaiton
+Ajouter dans tous les logs (applicatif, access log, etc.) pour qu'il soit visible dans l'outil d'aggrégation de logs
+--
+
+== Google Dapper
 
 * Trace-id : identifiant commun
 * Span-id : identifiant propre à une opération
-* Parent-span-id : identifiant du span parent
 
 [NOTE.speaker]
 --
 Document de travail : Google Dapper (2010) https://research.google.com/pubs/pub36356.html
+Mais aussi :
+Parent-span-id : identifiant du span parent
 --
 
 == Implémentations
 
-=== Solution technique manuelle : Filtre servlet,
+== A la mimine
 
-=== Solution Brave
+[NOTE.speaker]
+--
+Filtre servlet, intercepteur, ajouter les ids dans le MDC de l'outil de log, thread local
+--
 
-=== Solution Spring Cloud Sleuth
+== Bibliothèques
 
-Résultats logs access, appli applications appli, élastique elk elk
-Content
+
+== Spring Cloud Sleuth
 
 [NOTE.speaker]
 --
@@ -94,24 +126,42 @@ Intégration automatique des ids de corrélation dans le MDC des librairies de l
 
 --
 
-== Mise en scène 2 :
-2ème problématique : giphy est lent, d'où vient la lenteur ?
-
-Vidéo attente 5 secondes
-
-== Présentation Zipkin
-Sleuth et brave communiquent avec Zipkin
-
-Visualisation temporel des traces
+== Brave
 
 [NOTE.speaker]
 --
+https://github.com/openzipkin/brave
+Configuration + module / framework.
+Ex : Spring MVC - configuration listener
 
+--
+
+== Nouveau problème
+
+== Zzzz ...
+
+// TODO Vidéo attente 5 secondes
+
+[NOTE.speaker]
+--
+giphy est lent, d'où vient la lenteur ?
+--
+
+==  Zipkin
+
+[NOTE.speaker]
+--
+Sleuth et brave communiquent avec Zipkin
+Visualisation temporel des traces
 --
 
 == Vidéo zipkin
 
-== Explications des +4 événements
+// TODO Vidéo Zipkin
+
+== Evénements
+
+//  TODO remplacer par un schéma des événements CS, SR, SS, CR
 
 4 étapes dans un Span
 
@@ -121,25 +171,24 @@ Visualisation temporel des traces
  * Client Received
 
 
-== Mise en scène 3 : Obsoléscence des outils
+== Quelques mois plus tard...
 
+[NOTE.speaker]
+--
+Obsoléscence des outils
 peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
 Le projet est mort, pas maintenu
 Vous allez devoir jeter tout ce qui a été développé, et le développez avec un nouvel outil ??
 Aie aie aie
+--
 
-== Solution : Open tracing
+== La Solution...
 
-Principe :
+== Open tracing
 
-* Façade
-* Compatible Zipkin, mais aussi Jaeger...
-* Implémentation Brave compatible Open Tracing
-* Bibliothèque pour Spring Boot aussi simple que Sleuth
-*
-*
+==  Façade
 
-
+== Implémentations multiples
 [NOTE.speaker]
 --
 Autres outils : Jaeger, Lightstep
@@ -147,11 +196,10 @@ Plusieurs langages de programmation : Java, Go, PHP, Node.js, .NET
 Façade tel SLF4J pour le logging
 http://opentracing.io/documentation/pages/api/api-implementations.html
 https://medium.com/opentracing
-
 --
 
-=== Contributions
 
+== Zipkin, Jaeger, Lithstep...
 
 [NOTE.speaker]
 --
@@ -160,11 +208,7 @@ https://github.com/openzipkin-contrib/brave-opentracing
 
 --
 
-=== Qui utilise Open Tracing
-
-Uber, Apple, Yelp, Pinterest, Yelp ...
-
-=== Cloud Native Computing Fundation
+== Cloud Native Computing Fundation
 
 Promotion des solutions open source permettant de construire des applications distribuées et résilientes
 Chapoté par Linux Foundation
@@ -175,13 +219,28 @@ Autres projets : Kubernetes, Grpc, ...
 https://www.cncf.io/ : Cloud Native Computing Fundation, autres projets : Kubernetes, Prometheus, GRPC
 
 --
-== Conclusion :
+
+== Qui l'utilise ?
+
+[NOTE.speaker]
+--
+Uber, Apple, Yelp, Pinterest, Yelp ...
+--
+
+== Pour finir
+
+[NOTE.speaker]
+--
 Les Outils sont relativement jeunes, risqué de parier sur outil et trop se se lier à lui
 Open Tracing semble être une bonne solutiong
 Ne pas réinventer la roue
+--
 
+== Merci
 
+== Questions & infos
 
-
+https://github.com/fnegre/presentation-open-tracing
+Twitter : {twitter}
 
 
