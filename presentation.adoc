@@ -1,6 +1,11 @@
+// Variables prédéfinis asciidoc
 :author: Florian Nègre
 :twitter: @floriannegre
 :imagesDir: assets/images
+// variables perso
+:videosDir: assets/videos
+:imageMaxHeight: 700
+
 // Configuration Reveal.js
 :revealjs_history: true
 
@@ -16,15 +21,20 @@ Nantes JUG : 10/04/2018
 
 == Imaginons...
 
-//TODO : mettre image ou video
+video::/{videosDir}/giphy_rick_roll.mp4[]
 
 [NOTE.speaker]
 --
 Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
 Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affiche des photos de Trump à la place
-Utilisation de Fiddler pour créer un proxy
-https://media0.giphy.com/media/JIX9t2j0ZTN9S/200w_s.gif
-https://media0.giphy.com/media/**/*.gif --> pointe vers une photo de Trump
+Utilisation de Fiddler pour créer un proxy :
+```
+static function OnBeforeRequest(oSession: Session) {
+    if (oSession.uriContains("/media/")) {
+        oSession.fullUrl = "https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif";
+    }
+}
+```
 --
 
 
@@ -67,7 +77,7 @@ Schéma Ditaa
 Grep, téléchargement de centaines de mo de logs, pb pour ouvrir le fichier...
 --
 
-== Scénario 2 : Aggrégation logs
+== Scénario 2 : Aggrégation des logs
 
 [NOTE.speaker]
 --
@@ -83,11 +93,12 @@ Top moumoute
 --
 
 == Principe
-image::/{imagesDir}/schema-propagation-id-correlation.png[Schéma propagation id corrélation]
+image::schema-propagation-id-correlation.png[Schéma propagation id corrélation]
 
 [NOTE.speaker]
 --
-Expliquer le principe d'un identifiant de corrélaiton
+Expliquer le principe d'un identifiant de corrélation +
+Génération et transmission via header pour une requête http +
 Ajouter dans tous les logs (applicatif, access log, etc.) pour qu'il soit visible dans l'outil d'aggrégation de logs
 --
 
@@ -103,7 +114,43 @@ Mais aussi :
 Parent-span-id : identifiant du span parent
 --
 
+[transition=none]
+[%notitle]
+== Propagation - etape 1
+image::propagation/01.png[Schéma propagation id corrélation, height={imageMaxHeight}]
+
+[transition=none]
+[%notitle]
+== Propagation - etape 2
+image::propagation/02.png[Schéma propagation id corrélation, height={imageMaxHeight}]
+
+[transition=none]
+[%notitle]
+== Propagation - etape 3
+image::propagation/03.png[Schéma propagation id corrélation, height={imageMaxHeight}]
+
+[transition=none]
+[%notitle]
+== Propagation - etape 4
+image::propagation/04.png[Schéma propagation id corrélation, height={imageMaxHeight}]
+
+[transition=none]
+[%notitle]
+== Propagation - etape 5
+image::propagation/05.png[Schéma propagation id corrélation, height={imageMaxHeight}]
+
+[transition=none]
+[%notitle]
+== Propagation - etape 6
+image::propagation/06.png[Schéma propagation id corrélation, height={imageMaxHeight}]
+
+[transition=none]
+[%notitle]
+== Propagation - etape 7
+image::propagation/07.png[Schéma propagation id corrélation, height={imageMaxHeight}]
+
 == Implémentations
+:revealjs_transition: slide
 
 == A la mimine
 
@@ -138,14 +185,25 @@ Ex : Spring MVC - configuration listener
 
 == Nouveau problème
 
-== Zzzz ...
-
-// TODO Vidéo attente 5 secondes
+[%notitle]
+== C'est lent...
+video::/{videosDir}/giphy-lent.mp4[]
 
 [NOTE.speaker]
 --
 giphy est lent, d'où vient la lenteur ?
+```
+if (oSession.uriContains("giphy")) {
+    // Delay sends by 100ms per KB uploaded.
+    oSession["request-trickle-delay"] = "100";
+    // Delay receives by 150ms per KB downloaded.
+    oSession["response-trickle-delay"] = "150";
+}
+```
 --
+
+== Zzzz ...
+
 
 ==  Zipkin
 

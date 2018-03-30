@@ -6,11 +6,15 @@ document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--[if 
 <div class="paragraph"><p>Twitter : @floriannegre</p></div>
 <div class="paragraph"><p>Github : fnegre</p></div>
 <div class="paragraph"><p>Nantes JUG : 10/04/2018</p></div></div><p class="author"><small>Florian Nègre</small></p></section>
-<section id="imaginons"><h2>Imaginons&#8230;&#8203;</h2><aside class="notes"><div class="paragraph"><p>Mise en scène 1 : giphy n&#8217;affiche plus les gifs : oh my god!!
+<section id="imaginons"><h2>Imaginons&#8230;&#8203;</h2><div class="videoblock stretch"><video src="/assets/videos/giphy_rick_roll.mp4" width="100%" height="100%" controls>Your browser does not support the video tag.</video></div>
+<aside class="notes"><div class="paragraph"><p>Mise en scène 1 : giphy n&#8217;affiche plus les gifs : oh my god!!
 Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affiche des photos de Trump à la place
-Utilisation de Fiddler pour créer un proxy
-<a href="https://media0.giphy.com/media/JIX9t2j0ZTN9S/200w_s.gif" class="bare">https://media0.giphy.com/media/JIX9t2j0ZTN9S/200w_s.gif</a>
-<a href="https://media0.giphy.com/media/" class="bare">https://media0.giphy.com/media/</a><strong>*/</strong>.gif -&#8594; pointe vers une photo de Trump</p></div></aside></section>
+Utilisation de Fiddler pour créer un proxy :</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>static function OnBeforeRequest(oSession: Session) {
+    if (oSession.uriContains("/media/")) {
+        oSession.fullUrl = "https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif";
+    }
+}</code></pre></div></div></aside></section>
 <section id="architecture"><h2>Architecture</h2><div class="literalblock"><div class="content"><pre>                         +-------------+
                          |     IHM     |
                          +-------------+
@@ -30,16 +34,24 @@ Utilisation de Fiddler pour créer un proxy
 <aside class="notes"><div class="paragraph"><p>Schéma Ditaa</p></div></aside></section>
 <section id="comment_trouver_la_source_de_l_anomalie"><h2>Comment trouver la source de l&#8217;anomalie ?</h2></section>
 <section id="scnario_1_aucun_outil"><h2>Scénario 1 : Aucun outil</h2><aside class="notes"><div class="paragraph"><p>Grep, téléchargement de centaines de mo de logs, pb pour ouvrir le fichier&#8230;&#8203;</p></div></aside></section>
-<section id="scnario_2_aggrgation_logs"><h2>Scénario 2 : Aggrégation logs</h2><aside class="notes"><div class="paragraph"><p>elk sans id corrélation
+<section id="scnario_2_aggrgation_des_logs"><h2>Scénario 2 : Aggrégation des logs</h2><aside class="notes"><div class="paragraph"><p>elk sans id corrélation
 C&#8217;est mieux, mais reste galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs</p></div></aside></section>
 <section id="scnario_3_identifiants_de_corrlation"><h2>Scénario 3 : Identifiants de corrélation</h2><aside class="notes"><div class="paragraph"><p>Top moumoute</p></div></aside></section>
-<section id="principe"><h2>Principe</h2><div class="imageblock" style=""><img src="/assets/images/schema-propagation-id-correlation.png" alt="Schéma propagation id corrélation"></div>
-<aside class="notes"><div class="paragraph"><p>Expliquer le principe d&#8217;un identifiant de corrélaiton
+<section id="principe"><h2>Principe</h2><div class="imageblock" style=""><img src="assets/images/schema-propagation-id-correlation.png" alt="Schéma propagation id corrélation"></div>
+<aside class="notes"><div class="paragraph"><p>Expliquer le principe d&#8217;un identifiant de corrélation<br>
+Génération et transmission via header pour une requête http<br>
 Ajouter dans tous les logs (applicatif, access log, etc.) pour qu&#8217;il soit visible dans l&#8217;outil d&#8217;aggrégation de logs</p></div></aside></section>
 <section id="google_dapper"><h2>Google Dapper</h2><div class="ulist"><ul><li><p>Trace-id : identifiant commun</p></li><li><p>Span-id : identifiant propre à une opération</p></li></ul></div>
 <aside class="notes"><div class="paragraph"><p>Document de travail : Google Dapper (2010) <a href="https://research.google.com/pubs/pub36356.html" class="bare">https://research.google.com/pubs/pub36356.html</a>
 Mais aussi :
 Parent-span-id : identifiant du span parent</p></div></aside></section>
+<section id="propagation_etape_1" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/01.png" alt="Schéma propagation id corrélation" height="700"></div></section>
+<section id="propagation_etape_2" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/02.png" alt="Schéma propagation id corrélation" height="700"></div></section>
+<section id="propagation_etape_3" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/03.png" alt="Schéma propagation id corrélation" height="700"></div></section>
+<section id="propagation_etape_4" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/04.png" alt="Schéma propagation id corrélation" height="700"></div></section>
+<section id="propagation_etape_5" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/05.png" alt="Schéma propagation id corrélation" height="700"></div></section>
+<section id="propagation_etape_6" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/06.png" alt="Schéma propagation id corrélation" height="700"></div></section>
+<section id="propagation_etape_7" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/07.png" alt="Schéma propagation id corrélation" height="700"></div></section>
 <section id="implmentations"><h2>Implémentations</h2></section>
 <section id="a_la_mimine"><h2>A la mimine</h2><aside class="notes"><div class="paragraph"><p>Filtre servlet, intercepteur, ajouter les ids dans le MDC de l&#8217;outil de log, thread local</p></div></aside></section>
 <section id="bibliothques"><h2>Bibliothèques</h2></section>
@@ -51,7 +63,15 @@ Intégration automatique des ids de corrélation dans le MDC des librairies de l
 Configuration + module / framework.
 Ex : Spring MVC - configuration listener</p></div></aside></section>
 <section id="nouveau_problme"><h2>Nouveau problème</h2></section>
-<section id="zzzz"><h2>Zzzz &#8230;&#8203;</h2><aside class="notes"><div class="paragraph"><p>giphy est lent, d&#8217;où vient la lenteur ?</p></div></aside></section>
+<section id="c_est_lent"><div class="videoblock stretch"><video src="/assets/videos/giphy-lent.mp4" width="100%" height="100%" controls>Your browser does not support the video tag.</video></div>
+<aside class="notes"><div class="paragraph"><p>giphy est lent, d&#8217;où vient la lenteur ?</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>if (oSession.uriContains("giphy")) {
+    // Delay sends by 100ms per KB uploaded.
+    oSession["request-trickle-delay"] = "100";
+    // Delay receives by 150ms per KB downloaded.
+    oSession["response-trickle-delay"] = "150";
+}</code></pre></div></div></aside></section>
+<section id="zzzz"><h2>Zzzz &#8230;&#8203;</h2></section>
 <section id="zipkin"><h2>Zipkin</h2><aside class="notes"><div class="paragraph"><p>Sleuth et brave communiquent avec Zipkin
 Visualisation temporel des traces</p></div></aside></section>
 <section id="vido_zipkin"><h2>Vidéo zipkin</h2></section>
