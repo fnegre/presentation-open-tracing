@@ -170,7 +170,7 @@ https://github.com/spring-cloud/spring-cloud-sleuth
 Starter pour Spring Boot
 Gestion transparente de l’envoi/réception des headers de traçage via RestTemplate et RestController
 Intégration automatique des ids de corrélation dans le MDC des librairies de logs
-
+// TODO noter le nom des entêtes http utilisés
 --
 
 == Brave
@@ -178,8 +178,9 @@ Intégration automatique des ids de corrélation dans le MDC des librairies de l
 [NOTE.speaker]
 --
 https://github.com/openzipkin/brave
-Configuration + module / framework.
-Ex : Spring MVC - configuration listener
+Avantages : Compatibilité java 6d
+De nombreux modules existent pour faciliter l'intégration avec d'autres bibliothèques.
+Ex : Spring MVC, Jersey
 
 --
 
@@ -192,6 +193,7 @@ video::/{videosDir}/giphy-lent.mp4[]
 [NOTE.speaker]
 --
 giphy est lent, d'où vient la lenteur ?
+.Code Fiddler
 ```
 if (oSession.uriContains("giphy")) {
     // Delay sends by 100ms per KB uploaded.
@@ -205,17 +207,13 @@ if (oSession.uriContains("giphy")) {
 == Zzzz ...
 
 
-==  Zipkin
+== Zipkin
 
 [NOTE.speaker]
 --
+Outil de visualisation des traces
 Sleuth et brave communiquent avec Zipkin
-Visualisation temporel des traces
 --
-
-== Vidéo zipkin
-
-// TODO Vidéo Zipkin
 
 == Evénements
 
@@ -227,6 +225,11 @@ Visualisation temporel des traces
  * Server received
  * Server sent
  * Client Received
+
+
+== Vidéo zipkin
+
+// TODO Vidéo Zipkin
 
 
 == Quelques mois plus tard...
@@ -249,13 +252,11 @@ Aie aie aie
 == Implémentations multiples
 [NOTE.speaker]
 --
-Autres outils : Jaeger, Lightstep
 Plusieurs langages de programmation : Java, Go, PHP, Node.js, .NET
 Façade tel SLF4J pour le logging
 http://opentracing.io/documentation/pages/api/api-implementations.html
 https://medium.com/opentracing
 --
-
 
 == Zipkin, Jaeger, Lithstep...
 
@@ -266,32 +267,38 @@ https://github.com/openzipkin-contrib/brave-opentracing
 
 --
 
-== Cloud Native Computing Fundation
-
-Promotion des solutions open source permettant de construire des applications distribuées et résilientes
-Chapoté par Linux Foundation
-Autres projets : Kubernetes, Grpc, ...
-[NOTE.speaker]
---
-
-https://www.cncf.io/ : Cloud Native Computing Fundation, autres projets : Kubernetes, Prometheus, GRPC
-
---
-
 == Qui l'utilise ?
+
+// TODO Mettre logos des entreprises
 
 [NOTE.speaker]
 --
 Uber, Apple, Yelp, Pinterest, Yelp ...
 --
 
+== Cloud Native Computing Fundation
+
+https://www.cncf.io/
+
+[NOTE.speaker]
+--
+
+Promotion des solutions open source permettant de construire des applications distribuées et résilientes
+Chapoté par Linux Foundation
+Autres projets : Kubernetes, Prometheus, Grpc, ...
+https://www.cncf.io/
+
+--
+
+
 == Pour finir
 
 [NOTE.speaker]
 --
-Les Outils sont relativement jeunes, risqué de parier sur outil et trop se se lier à lui
-Open Tracing semble être une bonne solutiong
-Ne pas réinventer la roue
+* Traçage des requêtes indispensables
+* Ne pas réinventer la roue
+* Outils relativement jeunes, risqué de parier sur un outil
+* Open Tracing est une bonne solution
 --
 
 == Merci
@@ -299,6 +306,7 @@ Ne pas réinventer la roue
 == Questions & infos
 
 https://github.com/fnegre/presentation-open-tracing
+
 Twitter : {twitter}
 
 
