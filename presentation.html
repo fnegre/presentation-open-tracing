@@ -2,10 +2,7 @@
 link.rel = 'stylesheet';
 link.type = 'text/css';
 link.href = window.location.search.match( /print-pdf/gi ) ? "node_modules/reveal.js/css/print/pdf.css" : "node_modules/reveal.js/css/print/paper.css";
-document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--[if lt IE 9]><script src="node_modules/reveal.js/lib/js/html5shiv.js"></script><![endif]--></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>Présentation Open Tracing</h1><div class="preamble"><div class="paragraph"><p>Florian Nègre</p></div>
-<div class="paragraph"><p>Twitter : @floriannegre</p></div>
-<div class="paragraph"><p>Github : fnegre</p></div>
-<div class="paragraph"><p>Nantes JUG : 10/04/2018</p></div></div><p class="author"><small>Florian Nègre</small></p></section>
+document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--[if lt IE 9]><script src="node_modules/reveal.js/lib/js/html5shiv.js"></script><![endif]--></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>Présentation Open Tracing</h1><div class="preamble"><div class="ulist"><ul><li><p>Twitter : @floriannegre</p></li><li><p>Github : fnegre</p></li><li><p>Nantes Jug 10/04/2018</p></li></ul></div></div><p class="author"><small>Florian Nègre</small></p></section>
 <section id="imaginons"><h2>Imaginons&#8230;&#8203;</h2><div class="videoblock stretch"><video src="/assets/videos/giphy_rick_roll.mp4" width="100%" height="100%" controls>Your browser does not support the video tag.</video></div>
 <aside class="notes"><div class="paragraph"><p>Mise en scène 1 : giphy n&#8217;affiche plus les gifs : oh my god!!
 Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affiche des photos de Trump à la place
@@ -22,7 +19,7 @@ Utilisation de Fiddler pour créer un proxy :</p></div>
                                 | Requête
                                 v
                          +------+------+
-                         |     Back    |
+                         |   Serveur   |
                          +-------------+
                                 |
                                 | Requête
@@ -43,7 +40,6 @@ Génération et transmission via header pour une requête http<br>
 Ajouter dans tous les logs (applicatif, access log, etc.) pour qu&#8217;il soit visible dans l&#8217;outil d&#8217;aggrégation de logs</p></div></aside></section>
 <section id="google_dapper"><h2>Google Dapper</h2><div class="ulist"><ul><li><p>Trace-id : identifiant commun</p></li><li><p>Span-id : identifiant propre à une opération</p></li></ul></div>
 <aside class="notes"><div class="paragraph"><p>Document de travail : Google Dapper (2010) <a href="https://research.google.com/pubs/pub36356.html" class="bare">https://research.google.com/pubs/pub36356.html</a>
-Mais aussi :
 Parent-span-id : identifiant du span parent</p></div></aside></section>
 <section id="propagation_etape_1" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/01.png" alt="Schéma propagation id corrélation" height="700"></div></section>
 <section id="propagation_etape_2" data-transition="none"><div class="imageblock" style=""><img src="assets/images/propagation/02.png" alt="Schéma propagation id corrélation" height="700"></div></section>
@@ -60,11 +56,13 @@ Starter pour Spring Boot
 Gestion transparente de l’envoi/réception des headers de traçage via RestTemplate et RestController
 Intégration automatique des ids de corrélation dans le MDC des librairies de logs</p></div></aside></section>
 <section id="brave"><h2>Brave</h2><aside class="notes"><div class="paragraph"><p><a href="https://github.com/openzipkin/brave" class="bare">https://github.com/openzipkin/brave</a>
-Configuration + module / framework.
-Ex : Spring MVC - configuration listener</p></div></aside></section>
+Avantages : Compatibilité java 6d
+De nombreux modules existent pour faciliter l&#8217;intégration avec d&#8217;autres bibliothèques.
+Ex : Spring MVC, Jersey</p></div></aside></section>
 <section id="nouveau_problme"><h2>Nouveau problème</h2></section>
 <section id="c_est_lent"><div class="videoblock stretch"><video src="/assets/videos/giphy-lent.mp4" width="100%" height="100%" controls>Your browser does not support the video tag.</video></div>
-<aside class="notes"><div class="paragraph"><p>giphy est lent, d&#8217;où vient la lenteur ?</p></div>
+<aside class="notes"><div class="paragraph"><p>giphy est lent, d&#8217;où vient la lenteur ?
+.Code Fiddler</p></div>
 <div class="listingblock"><div class="content"><pre class="highlight"><code>if (oSession.uriContains("giphy")) {
     // Delay sends by 100ms per KB uploaded.
     oSession["request-trickle-delay"] = "100";
@@ -72,11 +70,12 @@ Ex : Spring MVC - configuration listener</p></div></aside></section>
     oSession["response-trickle-delay"] = "150";
 }</code></pre></div></div></aside></section>
 <section id="zzzz"><h2>Zzzz &#8230;&#8203;</h2></section>
-<section id="zipkin"><h2>Zipkin</h2><aside class="notes"><div class="paragraph"><p>Sleuth et brave communiquent avec Zipkin
-Visualisation temporel des traces</p></div></aside></section>
-<section id="vido_zipkin"><h2>Vidéo zipkin</h2></section>
+<section id="zipkin"><h2>Zipkin</h2><aside class="notes"><div class="ulist"><ul><li><p>Outil de visualisation des traces</p></li><li><p>Créé par Twitter, et mis en open source</p></li><li><p>Sleuth et brave envoient les traces à Zipkin</p></li><li><p>Stockage : Cassandra</p></li><li><p>type de requêtes : http (X-B3 headers), sql, redis, et d&#8217;autres</p></li><li><p><a href="https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html" class="bare">https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html</a></p></li></ul></div></aside></section>
 <section id="evnements"><h2>Evénements</h2><div class="paragraph"><p>4 étapes dans un Span</p></div>
 <div class="ulist"><ul><li><p>Client Sent</p></li><li><p>Server received</p></li><li><p>Server sent</p></li><li><p>Client Received</p></li></ul></div></section>
+<section id="schma_vnements"><div class="imageblock" style=""><img src="assets/images/schema-cs-sr-ss-cr.png" alt="schema cs sr ss cr"></div></section>
+<section id="une_trace_dans_zipkin"><h2>Une trace dans Zipkin</h2><div class="imageblock" style=""><img src="assets/images/zipkin.png" alt="Capture d'écran de Zipkin"></div>
+<aside class="notes"><div class="paragraph"><p>Permet de détecter les requêtes lentes, si la latence vient du réseau ou du serveur, etc.</p></div></aside></section>
 <section id="quelques_mois_plus_tard"><h2>Quelques mois plus tard&#8230;&#8203;</h2><aside class="notes"><div class="paragraph"><p>Obsoléscence des outils
 peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
 Le projet est mort, pas maintenu
@@ -84,25 +83,30 @@ Vous allez devoir jeter tout ce qui a été développé, et le développez avec 
 Aie aie aie</p></div></aside></section>
 <section id="la_solution"><h2>La Solution&#8230;&#8203;</h2></section>
 <section id="open_tracing"><h2>Open tracing</h2></section>
-<section id="faade"><h2>Façade</h2></section>
-<section id="implmentations_multiples"><h2>Implémentations multiples</h2><aside class="notes"><div class="paragraph"><p>Autres outils : Jaeger, Lightstep
-Plusieurs langages de programmation : Java, Go, PHP, Node.js, .NET
+<section id="faade"><h2>Façade</h2><aside class="notes"><div class="paragraph"><p>Comparaison avec Slf4J</p></div></aside></section>
+<section id="implmentations_multiples"><h2>Implémentations multiples</h2><aside class="notes"><div class="paragraph"><p>Plusieurs langages de programmation : Java, Go, PHP, Node.js, .NET
 Façade tel SLF4J pour le logging
 <a href="http://opentracing.io/documentation/pages/api/api-implementations.html" class="bare">http://opentracing.io/documentation/pages/api/api-implementations.html</a>
 <a href="https://medium.com/opentracing" class="bare">https://medium.com/opentracing</a></p></div></aside></section>
-<section id="zipkin_jaeger_lithstep"><h2>Zipkin, Jaeger, Lithstep&#8230;&#8203;</h2><aside class="notes"><div class="paragraph"><p><a href="https://github.com/opentracing-contrib" class="bare">https://github.com/opentracing-contrib</a>
+<section id="zipkin_jaeger_lightstep"><h2>Zipkin, Jaeger, Lightstep&#8230;&#8203;</h2><aside class="notes"><div class="paragraph"><p>Avantage Jaeger : ergonomie de l&#8217;ihm</p></div>
+<div class="paragraph"><p><a href="https://github.com/opentracing-contrib" class="bare">https://github.com/opentracing-contrib</a>
 <a href="https://github.com/openzipkin-contrib/brave-opentracing" class="bare">https://github.com/openzipkin-contrib/brave-opentracing</a></p></div></aside></section>
-<section id="cloud_native_computing_fundation"><h2>Cloud Native Computing Fundation</h2><div class="paragraph"><p>Promotion des solutions open source permettant de construire des applications distribuées et résilientes
-Chapoté par Linux Foundation
-Autres projets : Kubernetes, Grpc, &#8230;&#8203;</p></div>
-<aside class="notes"><div class="paragraph"><p><a href="https://www.cncf.io/" class="bare">https://www.cncf.io/</a> : Cloud Native Computing Fundation, autres projets : Kubernetes, Prometheus, GRPC</p></div></aside></section>
 <section id="qui_l_utilise"><h2>Qui l&#8217;utilise ?</h2><aside class="notes"><div class="paragraph"><p>Uber, Apple, Yelp, Pinterest, Yelp &#8230;&#8203;</p></div></aside></section>
-<section id="pour_finir"><h2>Pour finir</h2><aside class="notes"><div class="paragraph"><p>Les Outils sont relativement jeunes, risqué de parier sur outil et trop se se lier à lui
-Open Tracing semble être une bonne solutiong
-Ne pas réinventer la roue</p></div></aside></section>
+<section id="cloud_native_computing_fundation"><h2>Cloud Native Computing Fundation</h2><div class="paragraph"><p><a href="https://www.cncf.io/" class="bare">https://www.cncf.io/</a></p></div>
+<aside class="notes"><div class="paragraph"><p>Promotion des solutions open source permettant de construire des applications distribuées et résilientes
+Chapoté par Linux Foundation
+Autres projets : Kubernetes, Prometheus, Grpc, Jaeger, &#8230;&#8203;
+<a href="https://www.cncf.io/" class="bare">https://www.cncf.io/</a></p></div></aside></section>
+<section id="un_peu_de_recul"><h2>Un peu de recul</h2><aside class="notes"><div class="paragraph"><p>Certaines fonctionnalités activées que sur certaines implémentations :
+Incompatibilité possible</p></div>
+<div class="paragraph"><p>Avis d&#8217;un contributeur
+* <a href="https://gist.github.com/adriancole/3c4b70925b8f87d7c98e369216b916aa" class="bare">https://gist.github.com/adriancole/3c4b70925b8f87d7c98e369216b916aa</a></p></div></aside></section>
+<section id="pour_finir"><h2>Pour finir</h2><aside class="notes"><div class="ulist"><ul><li><p>Traçage des requêtes indispensables</p></li><li><p>Ne pas réinventer la roue</p></li><li><p>Outils relativement jeunes, risqué de parier sur un outil</p></li><li><p>Open Tracing est une bonne solution</p></li></ul></div>
+<div class="paragraph"><p>Un peu de lecture
+* <a href="https://sdtimes.com/apm/efforts-standardize-tracing-opentracing/" class="bare">https://sdtimes.com/apm/efforts-standardize-tracing-opentracing/</a></p></div></aside></section>
 <section id="merci"><h2>Merci</h2></section>
-<section id="questions_infos"><h2>Questions &amp; infos</h2><div class="paragraph"><p><a href="https://github.com/fnegre/presentation-open-tracing" class="bare">https://github.com/fnegre/presentation-open-tracing</a>
-Twitter : @floriannegre</p></div></section></div></div><script src="node_modules/reveal.js/lib/js/head.min.js"></script><script src="node_modules/reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+<section id="questions_infos"><h2>Questions &amp; infos</h2><div class="paragraph"><p><a href="https://github.com/fnegre/presentation-open-tracing" class="bare">https://github.com/fnegre/presentation-open-tracing</a></p></div>
+<div class="paragraph"><p>Twitter : @floriannegre</p></div></section></div></div><script src="node_modules/reveal.js/lib/js/head.min.js"></script><script src="node_modules/reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
 Reveal.initialize({
   // Display controls in the bottom right corner
   controls: true,

@@ -1,8 +1,8 @@
 // Variables prédéfinis asciidoc
 :author: Florian Nègre
-:twitter: @floriannegre
 :imagesDir: assets/images
 // variables perso
+:twitter: @floriannegre
 :videosDir: assets/videos
 :imageMaxHeight: 700
 
@@ -11,13 +11,9 @@
 
 = Présentation Open Tracing
 
-{author}
-
-Twitter : {twitter}
-
-Github : fnegre
-
-Nantes JUG : 10/04/2018
+* Twitter : {twitter}
+* Github : fnegre
+* Nantes Jug 10/04/2018
 
 == Imaginons...
 
@@ -49,7 +45,7 @@ static function OnBeforeRequest(oSession: Session) {
                                 | Requête
                                 v
                          +------+------+
-                         |     Back    |
+                         |   Serveur   |
                          +-------------+
                                 |
                                 | Requête
@@ -110,7 +106,6 @@ Ajouter dans tous les logs (applicatif, access log, etc.) pour qu'il soit visibl
 [NOTE.speaker]
 --
 Document de travail : Google Dapper (2010) https://research.google.com/pubs/pub36356.html
-Mais aussi :
 Parent-span-id : identifiant du span parent
 --
 
@@ -211,13 +206,15 @@ if (oSession.uriContains("giphy")) {
 
 [NOTE.speaker]
 --
-Outil de visualisation des traces
-Sleuth et brave communiquent avec Zipkin
+* Outil de visualisation des traces
+* Créé par Twitter, et mis en open source
+* Sleuth et brave envoient les traces à Zipkin
+* Stockage : Cassandra
+* type de requêtes : http (X-B3 headers), sql, redis, et d'autres
+* https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html
 --
 
 == Evénements
-
-//  TODO remplacer par un schéma des événements CS, SR, SS, CR
 
 4 étapes dans un Span
 
@@ -226,11 +223,19 @@ Sleuth et brave communiquent avec Zipkin
  * Server sent
  * Client Received
 
+[%notitle]
+== Schéma événements
 
-== Vidéo zipkin
+image::schema-cs-sr-ss-cr.png[]
 
-// TODO Vidéo Zipkin
+== Une trace dans Zipkin
 
+image::zipkin.png[Capture d'écran de Zipkin]
+
+[NOTE.speaker]
+--
+Permet de détecter les requêtes lentes, si la latence vient du réseau ou du serveur, etc.
+--
 
 == Quelques mois plus tard...
 
@@ -249,6 +254,11 @@ Aie aie aie
 
 ==  Façade
 
+[NOTE.speaker]
+--
+Comparaison avec Slf4J
+--
+
 == Implémentations multiples
 [NOTE.speaker]
 --
@@ -258,14 +268,16 @@ http://opentracing.io/documentation/pages/api/api-implementations.html
 https://medium.com/opentracing
 --
 
-== Zipkin, Jaeger, Lithstep...
+== Zipkin, Jaeger, Lightstep...
 
 [NOTE.speaker]
 --
+Avantage Jaeger : ergonomie de l'ihm
+
 https://github.com/opentracing-contrib
 https://github.com/openzipkin-contrib/brave-opentracing
-
 --
+
 
 == Qui l'utilise ?
 
@@ -285,11 +297,22 @@ https://www.cncf.io/
 
 Promotion des solutions open source permettant de construire des applications distribuées et résilientes
 Chapoté par Linux Foundation
-Autres projets : Kubernetes, Prometheus, Grpc, ...
+Autres projets : Kubernetes, Prometheus, Grpc, Jaeger, ...
 https://www.cncf.io/
 
 --
 
+== Un peu de recul
+
+
+[NOTE.speaker]
+--
+Certaines fonctionnalités activées que sur certaines implémentations :
+Incompatibilité possible
+
+Avis d'un contributeur
+* https://gist.github.com/adriancole/3c4b70925b8f87d7c98e369216b916aa
+--
 
 == Pour finir
 
@@ -299,6 +322,10 @@ https://www.cncf.io/
 * Ne pas réinventer la roue
 * Outils relativement jeunes, risqué de parier sur un outil
 * Open Tracing est une bonne solution
+
+Un peu de lecture
+* https://sdtimes.com/apm/efforts-standardize-tracing-opentracing/
+
 --
 
 == Merci
