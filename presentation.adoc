@@ -23,6 +23,7 @@ video::/{videosDir}/giphy_rick_roll.mp4[]
 --
 Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
 Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affiche des photos de Trump à la place
+
 Utilisation de Fiddler pour créer un proxy :
 ```
 static function OnBeforeRequest(oSession: Session) {
@@ -107,6 +108,8 @@ Ajouter dans tous les logs (applicatif, access log, etc.) pour qu'il soit visibl
 --
 Document de travail : Google Dapper (2010) https://research.google.com/pubs/pub36356.html
 Parent-span-id : identifiant du span parent
+Tag : clef/valeur associé à un span
+Baggage : clef/valeur hérité par les spans enfants
 --
 
 [transition=none]
@@ -152,6 +155,7 @@ image::propagation/07.png[Schéma propagation id corrélation, height={imageMaxH
 [NOTE.speaker]
 --
 Filtre servlet, intercepteur, ajouter les ids dans le MDC de l'outil de log, thread local
+Injection des identifiants de corrélation par le Load Balancer
 --
 
 == Bibliothèques
@@ -208,9 +212,10 @@ if (oSession.uriContains("giphy")) {
 --
 * Outil de visualisation des traces
 * Créé par Twitter, et mis en open source
-* Sleuth et brave envoient les traces à Zipkin
+* Sleuth et brave envoient les traces à Zipkin via Scribe
 * Stockage : Cassandra
 * type de requêtes : http (X-B3 headers), sql, redis, et d'autres
+* Notion de sampling rate
 * https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html
 --
 
@@ -234,10 +239,16 @@ image::zipkin.png[Capture d'écran de Zipkin]
 
 [NOTE.speaker]
 --
-Permet de détecter les requêtes lentes, si la latence vient du réseau ou du serveur, etc.
+Permet :
+
+* De détecter les requêtes lentes
+* Si la latence vient du réseau ou du serveur
+* Si une requête vers un serveur de cache est bien faite
 --
 
-== Quelques mois plus tard...
+== Imaginons, quelques mois plus tard...
+
+== un bug bloquant dans un de ces outils
 
 [NOTE.speaker]
 --
@@ -252,40 +263,54 @@ Aie aie aie
 
 == Open tracing
 
-==  Façade
+==  Une spécification
 
 [NOTE.speaker]
 --
+Spécification
+Non lié à une outil
+Partage de concepts, terminologie
 Comparaison avec Slf4J
+https://github.com/opentracing/specification/blob/master/specification.md
 --
 
-== Implémentations multiples
+
+== Langages supportés
+
+Java, Python, Go, PHP, JavaScript, .NET, Ruby, Rust, etc.
+
 [NOTE.speaker]
 --
-Plusieurs langages de programmation : Java, Go, PHP, Node.js, .NET
 Façade tel SLF4J pour le logging
 http://opentracing.io/documentation/pages/api/api-implementations.html
 https://medium.com/opentracing
 --
 
-== Zipkin, Jaeger, Lightstep...
+== Technologies supportées
+
+HTTP, Redis, JDBC, Memcached, Neo4J, Kafka, etc.
 
 [NOTE.speaker]
 --
-Avantage Jaeger : ergonomie de l'ihm
-
 https://github.com/opentracing-contrib
-https://github.com/openzipkin-contrib/brave-opentracing
+--
+
+== Traceurs : Zipkin, Jaeger, Lightstep...
+
+[NOTE.speaker]
+--
+http://opentracing.io/documentation/pages/supported-tracers
+https://eng.uber.com/distributed-tracing/
 --
 
 
 == Qui l'utilise ?
 
-// TODO Mettre logos des entreprises
+Uber, Apple, Yelp, Pinterest, Yelp ...
 
 [NOTE.speaker]
 --
-Uber, Apple, Yelp, Pinterest, Yelp ...
+
 --
 
 == Cloud Native Computing Fundation
@@ -296,22 +321,20 @@ https://www.cncf.io/
 --
 
 Promotion des solutions open source permettant de construire des applications distribuées et résilientes
-Chapoté par Linux Foundation
+Chapoté par la fondation Linux
 Autres projets : Kubernetes, Prometheus, Grpc, Jaeger, ...
+Membres : Red Hat, Docker, Pivotal, Google, AWS, ... Liste sur https://www.cncf.io/about/members/
 https://www.cncf.io/
 
 --
 
 == Un peu de recul
 
-
 [NOTE.speaker]
 --
-Certaines fonctionnalités activées que sur certaines implémentations :
-Incompatibilité possible
-
-Avis d'un contributeur
-* https://gist.github.com/adriancole/3c4b70925b8f87d7c98e369216b916aa
+* Certaines fonctionnalités activées que sur certains traceur.
+* Certains traceurs ne sont pas disponibles dans tous les langages
+* Avis d'un contributeur : https://gist.github.com/adriancole/3c4b70925b8f87d7c98e369216b916aa
 --
 
 == Pour finir
