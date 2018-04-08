@@ -4,7 +4,7 @@ link.type = 'text/css';
 link.href = window.location.search.match( /print-pdf/gi ) ? "node_modules/reveal.js/css/print/pdf.css" : "node_modules/reveal.js/css/print/paper.css";
 document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--[if lt IE 9]><script src="node_modules/reveal.js/lib/js/html5shiv.js"></script><![endif]--></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>Présentation Open Tracing</h1><div class="preamble"><div class="ulist"><ul><li><p>Twitter : @floriannegre</p></li><li><p>Github : fnegre</p></li><li><p>Nantes Jug 10/04/2018</p></li></ul></div></div><p class="author"><small>Florian Nègre</small></p></section>
 <section id="imaginons"><h2>Imaginons&#8230;&#8203;</h2><div class="videoblock stretch"><video src="/assets/videos/giphy_rick_roll.mp4" width="100%" height="100%" controls>Your browser does not support the video tag.</video></div>
-<aside class="notes"><div class="paragraph"><p>Mise en scène 1 : giphy n&#8217;affiche plus les gifs : oh my god!!
+<aside class="notes"><div class="paragraph"><p>Mise en scène 1 : Pour quelques utilisateurs, giphy n&#8217;affiche plus que des gifs rick roll: oh my god!!
 Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affiche des photos de Trump à la place</p></div>
 <div class="paragraph"><p>Utilisation de Fiddler pour créer un proxy :</p></div>
 <div class="listingblock"><div class="content"><pre class="highlight"><code>static function OnBeforeRequest(oSession: Session) {
@@ -32,13 +32,15 @@ Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affic
 <section id="comment_trouver_la_source_de_l_anomalie"><h2>Comment trouver la source de l&#8217;anomalie ?</h2></section>
 <section id="scnario_1_aucun_outil"><h2>Scénario 1 : Aucun outil</h2><aside class="notes"><div class="paragraph"><p>Grep, téléchargement de centaines de mo de logs, pb pour ouvrir le fichier&#8230;&#8203;</p></div></aside></section>
 <section id="scnario_2_aggrgation_des_logs"><h2>Scénario 2 : Aggrégation des logs</h2><aside class="notes"><div class="paragraph"><p>elk sans id corrélation
-C&#8217;est mieux, mais reste galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs</p></div></aside></section>
-<section id="scnario_3_identifiants_de_corrlation"><h2>Scénario 3 : Identifiants de corrélation</h2><aside class="notes"><div class="paragraph"><p>Top moumoute</p></div></aside></section>
+C&#8217;est mieux, mais reste galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs
+Ilustration scénario : on retrouve les appels au gif rick roll, mais on n&#8217;arrive pas à remonter aux autres requêtes</p></div></aside></section>
+<section id="scnario_3_identifiants_de_corrlation"><h2>Scénario 3 : Identifiants de corrélation</h2><aside class="notes"><div class="paragraph"><p>Top moumoute, lien facile à faire entre les applications
+Illustration scénario : retrouver les appels aux gifs rickroll, et retrouver l&#8217;ensemble des requêtes associées</p></div></aside></section>
 <section id="principe"><h2>Principe</h2><div class="imageblock" style=""><img src="assets/images/schema-propagation-id-correlation.png" alt="Schéma propagation id corrélation"></div>
 <aside class="notes"><div class="paragraph"><p>Expliquer le principe d&#8217;un identifiant de corrélation<br>
 Génération et transmission via header pour une requête http<br>
 Ajouter dans tous les logs (applicatif, access log, etc.) pour qu&#8217;il soit visible dans l&#8217;outil d&#8217;aggrégation de logs</p></div></aside></section>
-<section id="google_dapper"><h2>Google Dapper</h2><div class="ulist"><ul><li><p>Trace-id : identifiant commun</p></li><li><p>Span-id : identifiant propre à une opération</p></li></ul></div>
+<section id="google_dapper"><h2>Google Dapper</h2><div class="ulist"><ul><li><p>Trace-id : identifiant commun</p></li><li><p>Span-id : identifiant propre à une opération (span)</p></li></ul></div>
 <aside class="notes"><div class="paragraph"><p>Document de travail : Google Dapper (2010) <a href="https://research.google.com/pubs/pub36356.html" class="bare">https://research.google.com/pubs/pub36356.html</a>
 Parent-span-id : identifiant du span parent
 Tag : clef/valeur associé à un span
@@ -62,6 +64,7 @@ Intégration automatique des ids de corrélation dans le MDC des librairies de l
 Avantages : Compatibilité java 6d
 De nombreux modules existent pour faciliter l&#8217;intégration avec d&#8217;autres bibliothèques.
 Ex : Spring MVC, Jersey</p></div></aside></section>
+<section id="investigation"><h2>Investigation</h2></section>
 <section id="nouveau_problme"><h2>Nouveau problème</h2></section>
 <section id="c_est_lent"><div class="videoblock stretch"><video src="/assets/videos/giphy-lent.mp4" width="100%" height="100%" controls>Your browser does not support the video tag.</video></div>
 <aside class="notes"><div class="paragraph"><p>giphy est lent, d&#8217;où vient la lenteur ?
@@ -80,6 +83,7 @@ Ex : Spring MVC, Jersey</p></div></aside></section>
 <section id="une_trace_dans_zipkin"><h2>Une trace dans Zipkin</h2><div class="imageblock" style=""><img src="assets/images/zipkin.png" alt="Capture d'écran de Zipkin"></div>
 <aside class="notes"><div class="paragraph"><p>Permet :</p></div>
 <div class="ulist"><ul><li><p>De détecter les requêtes lentes</p></li><li><p>Si la latence vient du réseau ou du serveur</p></li><li><p>Si une requête vers un serveur de cache est bien faite</p></li></ul></div></aside></section>
+<section id="investigation_2"><h2>Investigation</h2></section>
 <section id="imaginons_quelques_mois_plus_tard"><h2>Imaginons, quelques mois plus tard&#8230;&#8203;</h2></section>
 <section id="un_bug_bloquant_dans_un_de_ces_outils"><h2>un bug bloquant dans un de ces outils</h2><aside class="notes"><div class="paragraph"><p>Obsoléscence des outils
 peut être dans 6 mois, 1 an, vous découvrez que Brave a une fuite mémoire, ou que Zipkin plante,
@@ -99,10 +103,11 @@ Comparaison avec Slf4J
 <a href="https://medium.com/opentracing" class="bare">https://medium.com/opentracing</a></p></div></aside></section>
 <section id="technologies_supportes"><h2>Technologies supportées</h2><div class="paragraph"><p>HTTP, Redis, JDBC, Memcached, Neo4J, Kafka, etc.</p></div>
 <aside class="notes"><div class="paragraph"><p><a href="https://github.com/opentracing-contrib" class="bare">https://github.com/opentracing-contrib</a></p></div></aside></section>
-<section id="traceurs_zipkin_jaeger_lightstep"><h2>Traceurs : Zipkin, Jaeger, Lightstep&#8230;&#8203;</h2><aside class="notes"><div class="paragraph"><p><a href="http://opentracing.io/documentation/pages/supported-tracers" class="bare">http://opentracing.io/documentation/pages/supported-tracers</a>
+<section id="traceurs_zipkin_jaeger_lightstep"><h2>Traceurs : Zipkin, Jaeger, Lightstep&#8230;&#8203;</h2><aside class="notes"><div class="paragraph"><p>Mettre en avant le fait que Brave et Sleuth ne fonctionnent qu&#8217;avec Zipkin
+<a href="http://opentracing.io/documentation/pages/supported-tracers" class="bare">http://opentracing.io/documentation/pages/supported-tracers</a>
 <a href="https://eng.uber.com/distributed-tracing/" class="bare">https://eng.uber.com/distributed-tracing/</a></p></div></aside></section>
-<section id="qui_l_utilise"><h2>Qui l&#8217;utilise ?</h2><div class="paragraph"><p>Uber, Apple, Yelp, Pinterest, Yelp &#8230;&#8203;</p></div>
-<aside class="notes"></aside></section>
+<section id="qui_l_utilise"><h2>Qui l&#8217;utilise ?</h2><div class="paragraph"><p>Uber, Apple, Yelp, Pinterest,  &#8230;&#8203;</p></div>
+<aside class="notes"><div class="paragraph"><p>TODO : Lister d&#8217;autres utilisateurs d&#8217;Open Tracing</p></div></aside></section>
 <section id="cloud_native_computing_fundation"><h2>Cloud Native Computing Fundation</h2><div class="paragraph"><p><a href="https://www.cncf.io/" class="bare">https://www.cncf.io/</a></p></div>
 <aside class="notes"><div class="paragraph"><p>Promotion des solutions open source permettant de construire des applications distribuées et résilientes
 Chapoté par la fondation Linux

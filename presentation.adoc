@@ -21,7 +21,7 @@ video::/{videosDir}/giphy_rick_roll.mp4[]
 
 [NOTE.speaker]
 --
-Mise en scène 1 : giphy n'affiche plus les gifs : oh my god!!
+Mise en scène 1 : Pour quelques utilisateurs, giphy n'affiche plus que des gifs rick roll: oh my god!!
 Faire une video où on va sur le site de Giphy, on cherche cat, et là ça affiche des photos de Trump à la place
 
 Utilisation de Fiddler pour créer un proxy :
@@ -80,13 +80,15 @@ Grep, téléchargement de centaines de mo de logs, pb pour ouvrir le fichier...
 --
 elk sans id corrélation
 C'est mieux, mais reste galère, on ne peut pas faire le lien entre les access logs et les logs applicatifs
+Ilustration scénario : on retrouve les appels au gif rick roll, mais on n'arrive pas à remonter aux autres requêtes
 --
 
 == Scénario 3 : Identifiants de corrélation
 
 [NOTE.speaker]
 --
-Top moumoute
+Top moumoute, lien facile à faire entre les applications
+Illustration scénario : retrouver les appels aux gifs rickroll, et retrouver l'ensemble des requêtes associées
 --
 
 == Principe
@@ -102,7 +104,7 @@ Ajouter dans tous les logs (applicatif, access log, etc.) pour qu'il soit visibl
 == Google Dapper
 
 * Trace-id : identifiant commun
-* Span-id : identifiant propre à une opération
+* Span-id : identifiant propre à une opération (span)
 
 [NOTE.speaker]
 --
@@ -183,6 +185,10 @@ Ex : Spring MVC, Jersey
 
 --
 
+== Investigation
+
+// TODO Expliquer comment on résoud le problème
+
 == Nouveau problème
 
 [%notitle]
@@ -246,6 +252,11 @@ Permet :
 * Si une requête vers un serveur de cache est bien faite
 --
 
+== Investigation
+
+// TODO Expliquer comment on résoud le problème
+
+
 == Imaginons, quelques mois plus tard...
 
 == un bug bloquant dans un de ces outils
@@ -262,6 +273,8 @@ Aie aie aie
 == La Solution...
 
 == Open tracing
+
+// Todo Différencier ce titre (couleur rouge ?)
 
 ==  Une spécification
 
@@ -299,6 +312,7 @@ https://github.com/opentracing-contrib
 
 [NOTE.speaker]
 --
+Mettre en avant le fait que Brave et Sleuth ne fonctionnent qu'avec Zipkin
 http://opentracing.io/documentation/pages/supported-tracers
 https://eng.uber.com/distributed-tracing/
 --
@@ -306,11 +320,11 @@ https://eng.uber.com/distributed-tracing/
 
 == Qui l'utilise ?
 
-Uber, Apple, Yelp, Pinterest, Yelp ...
+Uber, Apple, Yelp, Pinterest,  ...
 
 [NOTE.speaker]
 --
-
+TODO : Lister d'autres utilisateurs d'Open Tracing
 --
 
 == Cloud Native Computing Fundation
