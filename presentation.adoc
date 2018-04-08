@@ -17,7 +17,7 @@
 
 == Imaginons...
 
-video::/{videosDir}/giphy_rick_roll.mp4[]
+video::/{videosDir}/giphy_rick_roll.mp4[options=autoplay]
 
 [NOTE.speaker]
 --
@@ -189,6 +189,11 @@ Ex : Spring MVC, Jersey
 
 // TODO Expliquer comment on résoud le problème
 
+
+[%notitle]
+== Problème résolu
+// TODO Capture d'écran ou video de Giphy qui marche
+
 == Nouveau problème
 
 [%notitle]
@@ -225,6 +230,7 @@ if (oSession.uriContains("giphy")) {
 * https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html
 --
 
+
 == Evénements
 
 4 étapes dans un Span
@@ -235,9 +241,7 @@ if (oSession.uriContains("giphy")) {
  * Client Received
 
 [%notitle]
-== Schéma événements
 
-image::schema-cs-sr-ss-cr.png[]
 
 == Une trace dans Zipkin
 
@@ -274,7 +278,7 @@ Aie aie aie
 
 == Open tracing
 
-// Todo Différencier ce titre (couleur rouge ?)
+// Todo Différencier ce titre (couleur rouge ?) + logo
 
 ==  Une spécification
 
@@ -367,6 +371,11 @@ Un peu de lecture
 
 == Merci
 
+
+[NOTE.speaker]
+--
+Merci et désolé de vous avoir tous rickrollé
+--
 == Questions & infos
 
 https://github.com/fnegre/presentation-open-tracing
