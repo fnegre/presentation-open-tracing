@@ -9,7 +9,7 @@
 // Configuration Reveal.js
 :revealjs_history: true
 
-= Présentation Open Tracing
+= Présentation OpenTracing
 
 * Twitter : {twitter}
 * Github : fnegre
@@ -185,20 +185,25 @@ Ex : Spring MVC, Jersey
 
 --
 
-== Investigation
+== Résolution
 
-// TODO Expliquer comment on résoud le problème
-
+[NOTE.speaker]
+--
+Expliquer comment on résoud le problème : grâce à l'id de corrélation, on retrouve l'exception à la base du problème
+--
 
 [%notitle]
 == Problème résolu
-// TODO Capture d'écran ou video de Giphy qui marche
+
+image::giphy-cats.gif[Capture d'écran du site Giphy.com qui fonctionne correctement]
+
 
 == Nouveau problème
 
 [%notitle]
 == C'est lent...
-video::/{videosDir}/giphy-lent.mp4[]
+
+video::/{videosDir}/giphy-lent.mp4[options=autoplay]
 
 [NOTE.speaker]
 --
@@ -217,7 +222,9 @@ if (oSession.uriContains("giphy")) {
 == Zzzz ...
 
 
+[%notitle]
 == Zipkin
+image::zipkin-logo.jpg[Logo Zipkin]
 
 [NOTE.speaker]
 --
@@ -256,9 +263,14 @@ Permet :
 * Si une requête vers un serveur de cache est bien faite
 --
 
-== Investigation
+== Résolution
 
-// TODO Expliquer comment on résoud le problème
+[NOTE.speaker]
+--
+Expliquer comment on résoud le problème :
+Grâce à Zipkin, on voit qu'une requête ne passe pas par le cache
+--
+
 
 
 == Imaginons, quelques mois plus tard...
@@ -276,9 +288,12 @@ Aie aie aie
 
 == La Solution...
 
-== Open tracing
+[%notitle]
+[background-color="white"]
+== OpenTracing
 
-// Todo Différencier ce titre (couleur rouge ?) + logo
+image::opentracing-logo.png[Logo OpenTracing]
+
 
 ==  Une spécification
 
@@ -324,11 +339,13 @@ https://eng.uber.com/distributed-tracing/
 
 == Qui l'utilise ?
 
-Uber, Apple, Yelp, Pinterest,  ...
+image::opentracing-users.png[Utilisateurs OpenTracing]
+
 
 [NOTE.speaker]
 --
-TODO : Lister d'autres utilisateurs d'Open Tracing
+Uber, Apple, Yelp, Pinterest,  ...
+source Image : http://opentracing.io/
 --
 
 == Cloud Native Computing Fundation
@@ -362,7 +379,7 @@ https://www.cncf.io/
 * Traçage des requêtes indispensables
 * Ne pas réinventer la roue
 * Outils relativement jeunes, risqué de parier sur un outil
-* Open Tracing est une bonne solution
+* OpenTracing est une bonne solution
 
 Un peu de lecture
 * https://sdtimes.com/apm/efforts-standardize-tracing-opentracing/

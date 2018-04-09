@@ -1,18 +1,16 @@
+= Présentation Open Tracing
+
+== Lancement de la présentation
 .Installation via npm
 `npm i --save asciidoctor-reveal.js`
 
-.Génération du rendu
-`node build.js`
+.Génération du rendu et ouverture du navigateur
+`gulp`
 
+== Outillage
 
-npm install -g grunt-cli
-npm install grunt-contrib-watch --save-dev
-npm install grunt-contrib-connect --save-dev
+Utilisation de : https://asciidoctor.org/docs/asciidoctor-revealjs/
 
-npm install -g gulp
-npm i browser-sync
-
-
-https://asciidoctor.org/docs/asciidoctor-revealjs/
+=== Problématiques
 
 Pas de diagramme avec asciidoctor.js : https://github.com/asciidoctor/asciidoctor.js/issues/410
