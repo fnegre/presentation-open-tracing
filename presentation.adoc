@@ -9,7 +9,7 @@
 // Configuration Reveal.js
 :revealjs_history: true
 
-= Présentation OpenTracing
+= OpenTracing
 
 * Twitter : {twitter}
 * Github : fnegre
@@ -350,7 +350,7 @@ source Image : http://opentracing.io/
 
 == Cloud Native Computing Fundation
 
-https://www.cncf.io/
+https://www.cncf.io
 
 [NOTE.speaker]
 --
