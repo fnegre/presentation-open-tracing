@@ -79,11 +79,13 @@ Ex : Spring MVC, Jersey</p></div></aside></section>
 <section id="zzzz"><h2>Zzzz &#8230;&#8203;</h2></section>
 <section id="zipkin"><div class="imageblock" style=""><img src="assets/images/zipkin-logo.jpg" alt="Logo Zipkin"></div>
 <aside class="notes"><div class="ulist"><ul><li><p>Outil de visualisation des traces</p></li><li><p>Créé par Twitter, et mis en open source</p></li><li><p>Sleuth et brave envoient les traces à Zipkin via Scribe</p></li><li><p>Stockage : Cassandra</p></li><li><p>type de requêtes : http (X-B3 headers), sql, redis, et d&#8217;autres</p></li><li><p>Notion de sampling rate</p></li><li><p><a href="https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html" class="bare">https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html</a></p></li></ul></div></aside></section>
-<section id="evnements"><h2>Evénements</h2><div class="paragraph"><p>4 étapes dans un Span</p></div>
-<div class="ulist"><ul><li><p>Client Sent</p></li><li><p>Server received</p></li><li><p>Server sent</p></li><li><p>Client Received</p></li></ul></div></section>
-<section id="une_trace_dans_zipkin"><div class="imageblock" style=""><img src="assets/images/zipkin.png" alt="Capture d'écran de Zipkin"></div>
+<section id="moteur_de_recherche"><div class="imageblock" style=""><img src="assets/images/zipkin-moteur-recherche.jpg" alt="Capture d'écran du moteur de recherche de Zipkin"></div></section>
+<section id="une_trace_dans_zipkin"><div class="imageblock" style=""><img src="assets/images/zipkin-trace.png" alt="Capture d'écran d'une trace dans Zipkin"></div>
 <aside class="notes"><div class="paragraph"><p>Permet :</p></div>
 <div class="ulist"><ul><li><p>De détecter les requêtes lentes</p></li><li><p>Si la latence vient du réseau ou du serveur</p></li><li><p>Si une requête vers un serveur de cache est bien faite</p></li></ul></div></aside></section>
+<section id="dtails_d_un_span"><div class="imageblock" style=""><img src="assets/images/zipkin-details-span.jpg" alt="Capture d'écran des détails d'un span dans Zipkin" width="100%"></div>
+<aside class="notes"><div class="paragraph"><p>4 étapes dans un Span</p></div>
+<div class="ulist"><ul><li><p>Client Sent</p></li><li><p>Server received</p></li><li><p>Server sent</p></li><li><p>Client Received</p></li></ul></div></aside></section>
 <section id="rsolution_2"><h2>Résolution</h2><aside class="notes"><div class="paragraph"><p>Expliquer comment on résoud le problème :
 Grâce à Zipkin, on voit qu&#8217;une requête ne passe pas par le cache</p></div></aside></section>
 <section id="imaginons_quelques_mois_plus_tard"><h2>Imaginons, quelques mois plus tard&#8230;&#8203;</h2></section>
@@ -93,8 +95,8 @@ Le projet est mort, pas maintenu
 Vous allez devoir jeter tout ce qui a été développé, et le développez avec un nouvel outil ??
 Aie aie aie</p></div></aside></section>
 <section id="la_solution"><h2>La Solution&#8230;&#8203;</h2></section>
-<section id="opentracing" data-background-color="white"><div class="imageblock" style=""><img src="assets/images/opentracing-logo.png" alt="Logo OpenTracing"></div></section>
-<section id="une_spcification"><h2>Une spécification</h2><aside class="notes"><div class="paragraph"><p>Spécification
+<section id="opentracing" data-background-color="white"><div class="imageblock" style=""><img src="assets/images/opentracing-logo.png" alt="Logo OpenTracing"></div>
+<aside class="notes"><div class="paragraph"><p>Spécification
 Non lié à une outil
 Partage de concepts, terminologie
 Comparaison avec Slf4J

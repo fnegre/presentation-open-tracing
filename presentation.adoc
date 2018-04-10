@@ -238,21 +238,15 @@ image::zipkin-logo.jpg[Logo Zipkin]
 --
 
 
-== Evénements
+[%notitle]
+== Moteur de recherche
 
-4 étapes dans un Span
-
- * Client Sent
- * Server received
- * Server sent
- * Client Received
+image::zipkin-moteur-recherche.jpg[Capture d'écran du moteur de recherche de Zipkin]
 
 [%notitle]
-
-
 == Une trace dans Zipkin
 
-image::zipkin.png[Capture d'écran de Zipkin]
+image::zipkin-trace.png[Capture d'écran d'une trace dans Zipkin]
 
 [NOTE.speaker]
 --
@@ -262,6 +256,23 @@ Permet :
 * Si la latence vient du réseau ou du serveur
 * Si une requête vers un serveur de cache est bien faite
 --
+
+
+[%notitle]
+== Détails d'un span
+
+image::zipkin-details-span.jpg[Capture d'écran des détails d'un span dans Zipkin,width=100%]
+
+[NOTE.speaker]
+--
+4 étapes dans un Span
+
+ * Client Sent
+ * Server received
+ * Server sent
+ * Client Received
+--
+
 
 == Résolution
 
@@ -293,9 +304,6 @@ Aie aie aie
 == OpenTracing
 
 image::opentracing-logo.png[Logo OpenTracing]
-
-
-==  Une spécification
 
 [NOTE.speaker]
 --
